@@ -48,6 +48,10 @@ function removeEx(index) {
     }
 }
 
+function chooseDate () {
+    document.getElementById('date').click();
+}
+
 function postData () {
     
     let tableBody = document.querySelector("#saved_ex tbody");
