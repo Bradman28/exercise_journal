@@ -8,7 +8,7 @@
     <script src="app.js"></script>
     <title>Exercise Journal</title>
 </head>
-<body onload="postData()">
+<body onload="postArchive()">
     <div class="container-fluid bg-light">
         <nav class="navbar navbar-expand-sm sticky-top navbar-dark bg-dark">
             <div class="container-fluid">
@@ -29,12 +29,12 @@
                 </ul>
             </div>
         </nav>
-        <h1>Journal</h1><hr><br>
-        <h5>You can see your progress below. Keep up the great work!</h5>
+        <h1>Archive</h1><hr><br>
+        <h5>In the Archive, you can view your past progress. This is a way for you to review all the great workouts you have had in the past!</h5>
         <br>
         <br>
 
-        <table class="table table-hover" id="saved_ex">
+        <table class="table table-hover" id="archived_ex">
             <thead class="table-primary">
                 <tr>
                     <th>Date</th>
@@ -42,7 +42,6 @@
                     <th>Weight/ Time</th>
                     <th>Sets</th>
                     <th>Repetitions</th>
-                    <th>Archive</th>
                     <th>Remove</th>
                 </tr>
             </thead>
@@ -50,7 +49,7 @@
                 
             </tbody>
         </table>
-        <button type="submit" class="btn btn-warning btn-sm" onclick="archiveAll()">Archive All</button>
+        <button type="submit" class="btn btn-warning btn-sm" onclick="clearData()">Clear All</button>
         <br>
         <br>
         <br>
