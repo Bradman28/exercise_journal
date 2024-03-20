@@ -30,7 +30,7 @@ function pullData () {
 function clearData(){
     let confirmation = confirm("Are you sure you want to clear all data?")
     if (confirmation) {
-        let confirmTwo = confirm("This will clear all existing entries, are you sure?")
+        let confirmTwo = confirm("This will clear all Journal and Archive entries, are you sure?")
         if (confirmTwo)
             localStorage.clear();
             window.location.href = "archive.html";
