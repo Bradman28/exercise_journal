@@ -30,8 +30,10 @@ function pullData () {
 function clearData(){
     let confirmation = confirm("Are you sure you want to clear all data?")
     if (confirmation) {
-    localStorage.clear();
-    window.location.href = "archive.html";
+        let confirmTwo = confirm("This will clear all existing entries, are you sure?")
+        if (confirmTwo)
+            localStorage.clear();
+            window.location.href = "archive.html";
     }
 }
 
@@ -95,33 +97,38 @@ function postData () {
 function archiveData(index) {
     let tableBody = document.querySelector("#saved_ex tbody");
     let row = tableBody.children[index];
+    let confirmation = confirm("Are you sure you want to archive this entry?");
 
-    let arc_date = row.cells[0].innerText;
-    let arc_exercise = row.cells[1].innerText;
-    let arc_weight = row.cells[2].innerText;
-    let arc_sets = row.cells[3].innerText;
-    let arc_reps = row.cells[4].innerText;
+    if (confirmation) {
+        let arc_date = row.cells[0].innerText;
+        let arc_exercise = row.cells[1].innerText;
+        let arc_weight = row.cells[2].innerText;
+        let arc_sets = row.cells[3].innerText;
+        let arc_reps = row.cells[4].innerText;
+        
+        let archivedEntry = {
+            date: arc_date,
+            exercise: arc_exercise,
+            weight: arc_weight,
+            sets: arc_sets,
+            reps: arc_reps
+        };
     
-    let archivedEntry = {
-        date: arc_date,
-        exercise: arc_exercise,
-        weight: arc_weight,
-        sets: arc_sets,
-        reps: arc_reps
+        let archivedEntryList = JSON.parse(localStorage.getItem("archivedEntryList")) || [];
+        archivedEntryList.push(archivedEntry);
+        localStorage.setItem("archivedEntryList", JSON.stringify(archivedEntryList));
+    
+        // removes from exerciseDataList
+        let exerciseDataList = JSON.parse(localStorage.getItem("exerciseDataList")) || [];
+        exerciseDataList.splice(index, 1);
+        localStorage.setItem("exerciseDataList", JSON.stringify(exerciseDataList));
+    
+        postData();
+    
     };
-
-    let archivedEntryList = JSON.parse(localStorage.getItem("archivedEntryList")) || [];
-    archivedEntryList.push(archivedEntry);
-    localStorage.setItem("archivedEntryList", JSON.stringify(archivedEntryList));
-
-    // removes from exerciseDataList
-    let exerciseDataList = JSON.parse(localStorage.getItem("exerciseDataList")) || [];
-    exerciseDataList.splice(index, 1);
-    localStorage.setItem("exerciseDataList", JSON.stringify(exerciseDataList));
-
-    postData();
 }
 
+// the postArchive function displays all all data in the archivedEntryList list on the table in archive.html
 function postArchive() {
     let tableBody = document.querySelector("#archived_ex tbody");
     tableBody.innerHTML = '';
@@ -141,10 +148,47 @@ function postArchive() {
         <td>${archivedData.weight}</td>
         <td>${archivedData.sets}</td>
         <td>${archivedData.reps}</td>
-        <td><button class="btn btn-danger btn-sm" onclick="removeEx(${index})">Remove</button></td>
+        <td><button class="btn btn-danger btn-sm" onclick="removeArc(${index})">Remove</button></td>
         `;
         
         //new row is appended to tableBody, which represents tbody element of table
         tableBody.appendChild(row);
     });
+}
+
+// the archiveAll function will take all journal entries from exerciseDataList list in local storage and move them to
+// the archivedEntryList list
+function archiveAll() {
+    let exerciseDataList = JSON.parse(localStorage.getItem("exerciseDataList")) || [];
+    let archivedEntryList = JSON.parse(localStorage.getItem("archivedEntryList")) || [];
+    let confirmation = confirm("Are you sure you want to archive all entries in your Journal?")
+
+    if (confirmation) {
+        archivedEntryList.push(...exerciseDataList);
+
+        localStorage.setItem("archivedEntryList", JSON.stringify(archivedEntryList));
+    
+        // Clear the journal page's local storage
+        localStorage.removeItem("exerciseDataList");
+    
+        // Reload the page to reflect changes
+        location.reload();    
+    }
+}
+
+// the removeArc function removes a single line entry from the archive page
+function removeArc(index) {
+    let archivedEntryList = JSON.parse(localStorage.getItem("archivedEntryList")) || [];
+
+    let confirmation = confirm("Are you sure you want to clear this row?")
+    if (confirmation) {
+        // Remove the entry corresponding to the given index from the array
+        archivedEntryList.splice(index, 1);
+
+        // Update local storage with the modified array
+        localStorage.setItem("archivedEntryList", JSON.stringify(archivedEntryList));
+
+        // Run postData function to update the table 
+        postArchive();
+    }
 }
