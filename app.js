@@ -28,7 +28,7 @@ function pullData () {
     let exerciseDataList = JSON.parse(localStorage.getItem("exerciseDataList")) || [];
     exerciseDataList.push(exerciseData);
     localStorage.setItem("exerciseDataList", JSON.stringify(exerciseDataList));
-    // alert("posted")
+    alert("Your entry has posted to your Journal!")
 }
 
 // the chooseDate function is from bootstrap and displays the date choosen from the embedded calendar icon
@@ -140,7 +140,7 @@ function archiveAll() {
         localStorage.removeItem("exerciseDataList");
     
         // Reload the page to reflect changes
-        location.reload();    
+        window.location.href = "archive.html";
     }
 }
 
